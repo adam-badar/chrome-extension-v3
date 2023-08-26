@@ -1,24 +1,23 @@
-import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig } from "plasmo"
 
-import { CountButton } from "~features/count-button"
-
 export const config: PlasmoCSConfig = {
-  matches: ["https://www.plasmo.com/*"]
+  matches: ["<all_urls>"],
+  all_frames: true
 }
 
-export const getStyle = () => {
-  const style = document.createElement("style")
-  style.textContent = cssText
-  return style
+function injectPopup() {
+  const popupRoot = document.createElement("div")
+  popupRoot.id = "extension-popup"
+  document.body.appendChild(popupRoot)
+
+  const blockButton = document.createElement("button")
+  blockButton.id = "block-button"
+  blockButton.textContent = "Block Website"
+  blockButton.addEventListener("click", () => {
+    chrome.runtime.sendMessage({ action: "blockWebsite" })
+  })
+
+  popupRoot.appendChild(blockButton)
 }
 
-const PlasmoOverlay = () => {
-  return (
-    <div className="z-50 flex fixed top-32 right-8">
-      <CountButton />
-    </div>
-  )
-}
-
-export default PlasmoOverlay
+injectPopup()

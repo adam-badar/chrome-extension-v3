@@ -1,14 +1,35 @@
-import { CountButton } from "~features/count-button"
+
 
 import "~style.css"
 
 function IndexPopup() {
   const handleBlockWebsite = () => {
-    console.log("handleBlockWebsite");
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0]
+      if (activeTab) {
+        chrome.scripting.executeScript(
+          {
+            target: { tabId: activeTab.id },
+            func: blockContent
+          },
+          (results) => {
+            if (chrome.runtime.lastError) {
+              console.error(chrome.runtime.lastError.message)
+            }
+          }
+        )
+      }
+    })
+  }
+  function blockContent() {
+    const blockMessage = document.createElement("div")
+    blockMessage.textContent = "This website has been blocked"
+    document.body.innerHTML = "" // Clear existing content
+    document.body.appendChild(blockMessage)
   }
 
   const handleUnblockWebsite = () => {
-    console.log("handleUnblockWebsite");
+    console.log("handleUnblockWebsite")
   }
   return (
     <div className="w-80 h-96 bg-zinc-300 flex flex-col justify-center items-center">

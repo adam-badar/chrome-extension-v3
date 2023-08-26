@@ -28,6 +28,15 @@
   "manifest": {
     "host_permissions": [
       "https://*/*"
+    ],
+    "permissions": [
+      "storage",
+      "tabs",
+      "activeTab",
+      "scripting",
+      "webNavigation",
+      "webRequest",
+      "declarativeContent"
     ]
   }
 }
